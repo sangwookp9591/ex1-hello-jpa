@@ -14,8 +14,9 @@
 
             <!-- 옵션 -->
             <property name="hibernate.show_sql" value="true"/><!--db 쿼리 볼거냐 ?-->
-            <property name="hibernate.format_sql" value="true"/>
-            <property name="hibernate.use_sql_comments" value="true"/>
+            <property name="hibernate.format_sql" value="true"/><!--db 쿼리의 가독성을 올려줌-->
+            <property name="hibernate.use_sql_comments" value="true"/><!--    /* insert hellojpa.Member
+        */ 이런 코맨트를 확인 할 수  있다.-->
             <!--<property name="hibernate.hbm2ddl.auto" value="create" />-->
         </properties>
     </persistence-unit>
