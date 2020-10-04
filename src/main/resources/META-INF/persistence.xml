@@ -17,6 +17,7 @@
             <property name="hibernate.format_sql" value="true"/><!--db 쿼리의 가독성을 올려줌-->
             <property name="hibernate.use_sql_comments" value="true"/><!--    /* insert hellojpa.Member
         */ 이런 코맨트를 확인 할 수  있다.-->
+            <property name="hibernate.jdbc.batch_size" value="10"/><!--이 사이즈 만큼 모아서 한방에 db에 query를 보냄-->
             <!--<property name="hibernate.hbm2ddl.auto" value="create" />-->
         </properties>
     </persistence-unit>
