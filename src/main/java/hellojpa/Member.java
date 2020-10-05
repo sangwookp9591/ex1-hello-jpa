@@ -12,9 +12,30 @@ public class Member {
 
     @Id //id가 pk라는것을 알려줘야한다.
     private Long id;
-
     //@Column(name = "username") db컬럼이름이 name이 아니고 username일 경우
+    //@Column(unique = true,length = 10) 이런식으로 unique제약조건 및 varchar 10 이런식으로도 설정할 수 있다.
+                                        //DDL 생성기능은 DDL을 자동생성할 때만 사용되고 JPA의 실행 로직에는 영향을 주지 않는다.
     private String name;
+
+    /*JPA는 application loading 시점에 db table을 생성하는 기능을 지원.
+    * 운영보다는 개발 or local환경에서 사용
+    *
+    * -보통은 table 만들고 객체로 돌아와서 매핑하는데 JPA는 그럴필요가 없다.
+    *
+    * -데이터베이스 방언을 활용해서 데이터베이스에 맞는 적절한 DDL 사용
+    *   이렇게 생성된 DDL은 개발장비에서만 사용
+    *   생성된 DDL은 운영서버에서는 사용하지 않거나, 적절히 다듬은 후 사용
+    *persistence.xml에 <property name="hibernate.hbm2ddl.auto" value="create" /> 부분이다.
+    *
+    * member drop 후 create table 생성
+    *
+    *
+    * */
+
+    public Member(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 
     public Long getId() {
         return id;

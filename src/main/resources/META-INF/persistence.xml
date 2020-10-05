@@ -18,7 +18,20 @@
             <property name="hibernate.use_sql_comments" value="true"/><!--    /* insert hellojpa.Member
         */ 이런 코맨트를 확인 할 수  있다.-->
             <property name="hibernate.jdbc.batch_size" value="10"/><!--이 사이즈 만큼 모아서 한방에 db에 query를 보냄-->
-            <!--<property name="hibernate.hbm2ddl.auto" value="create" />-->
+            <property name="hibernate.hbm2ddl.auto" value="create" />
+            <!--
+            create : 기존테이블 삭제 후 다시 생성 (DROP + CREATE)
+            create-drop : create와 같으나 종료시점에 테이블 DROP  - testcase 같은거 작성시 사용
+            update : 변경분만 반영(운영DB에는 사용하면 안됨)  - 추가만가능 지우는건 안됨 ->table 컬럼 날라가면 큰일남..
+            validate : 엔티티와 테이블이 정상 매핑되었는지만 확인 - 신규컬럼 추가시 -> 비교해서 다를시 error
+            none : 기능 자체를 사용하지 않음
+
+            -====주의=====
+            운영 장비에는 절대 create, create-drop, update 사용하면 안된다.
+            • 개발 초기 단계는 create 또는 update
+            • 테스트 서버는 update 또는 validate (validate 말고는 가급적이면 사용 x)
+            • 스테이징과 운영 서버는 validate 또는 none
+            -->
         </properties>
     </persistence-unit>
 </persistence>
