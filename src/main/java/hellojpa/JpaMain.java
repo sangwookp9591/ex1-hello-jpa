@@ -185,15 +185,15 @@ public class JpaMain {
         * */
 
             //비영속
-           Member member = new Member();
-            member.setId(100L);
-            member.setName("HelloJPA");
-
-            //영속 //persist or em.find 성능상 이점보다 메커니즘을 통해 얻는 이점이 있다.
-            System.out.println("===BEFORE===");
-            em.persist(member); //em안에있는 영속성 컨텍스트에서 member가 관리가 된다.
-            // em.persist(member); 까지는 실제 DB에는 저장이 되지 않는다. 그럼 어디서 DB에 저장이 되는 것인가?
-
+//           Member member = new Member();
+//            member.setId(100L);
+//            member.setName("HelloJPA");
+//
+//            //영속 //persist or em.find 성능상 이점보다 메커니즘을 통해 얻는 이점이 있다.
+//            System.out.println("===BEFORE===");
+//            em.persist(member); //em안에있는 영속성 컨텍스트에서 member가 관리가 된다.
+//            // em.persist(member); 까지는 실제 DB에는 저장이 되지 않는다. 그럼 어디서 DB에 저장이 되는 것인가?
+//            System.out.println("===AFTER===");
             //준영속
             /*
             detach하게되면 영속성 컨텍스트에서 지움.
@@ -222,7 +222,7 @@ public class JpaMain {
             //객체를 삭제한 상태(실제 영구저장한 db에서 지우겠어)
             //em.remove(member);
 
-            System.out.println("===AFTER===");
+
 
             
             tx.commit(); //transaction을  commit하는 시점에 영속성 컨텍스트에 있는애가 db에 쿼리가 날라감.
