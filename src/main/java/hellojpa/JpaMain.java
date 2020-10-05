@@ -189,16 +189,35 @@ public class JpaMain {
             member.setId(100L);
             member.setName("HelloJPA");
 
-            //영속
+            //영속 //persist or em.find 성능상 이점보다 메커니즘을 통해 얻는 이점이 있다.
             System.out.println("===BEFORE===");
             em.persist(member); //em안에있는 영속성 컨텍스트에서 member가 관리가 된다.
             // em.persist(member); 까지는 실제 DB에는 저장이 되지 않는다. 그럼 어디서 DB에 저장이 되는 것인가?
 
             //준영속
-            //detach하게되면 영속성 컨텍스트에서 지움.
-            //회원 엔티티를 영속성 컨텍스트에서 분리, 준영속 상태
-            //em.detach(member);
-            
+            /*
+            detach하게되면 영속성 컨텍스트에서 지움.
+            회원 엔티티를 영속성 컨텍스트에서 분리, 준영속 상태
+            em.detach(member);
+
+            영속 -> 준영속
+
+            영속 상태의 엔티티가 영속성 컨텍스트에서 분리(detached) -> UPDATE, 더티 채킹 같은 기능을 사용못하는것!
+
+            영속성 컨텍스트가 제공하는 기능을 사용 못함
+
+            영속( EX ) find의 경우 data가없을때 1차 캐시에 올리는것 ! JPA가 관리하는 상태가 된것)
+
+            준영속 상태를 만드는 방법
+            1. em.detach(entity) - 특정 엔티티만 준영속 상태로 전환
+
+            2. em.clear() - 영속성 컨텍스트를 완전히 초기화
+
+            3. em.close() - 영속성 컨텍스트를 종료
+
+            지금은 이론만 알아두면된다.
+            */
+
             //삭제
             //객체를 삭제한 상태(실제 영구저장한 db에서 지우겠어)
             //em.remove(member);
