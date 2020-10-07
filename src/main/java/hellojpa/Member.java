@@ -51,13 +51,15 @@ public class Member {
     }*/
 
 /*
-      필드와 컬럼 매핑
+
+
+      필드와 컬럼 매핑 20201007
 
       1. 회원은 일반 회원과 관리자로 구분해야 한다.
       2. 회원 가입일과 수정일이 있어야 한다.
       3. 회원을 설명할 수 있는 필드가 있어야 한다. 이 필드는 길이 제
        한이 없다
- .*/
+ .*//*
     @Id
     private Long id;
     @Column(name = "name", insertable = true,updatable = true) //insert/updat/able 컬럼을 수정했을때 뭔가 DB에 INSERT할거냐 말거냐 반영을 할것인가 말것인가? 기본은 TRUE이다.
@@ -77,13 +79,13 @@ public class Member {
 
 
 
-    /*
+    *//*
     JAVA 8 이상의경우
     * 최근에는  LocalDate, LocalDateTime이 들어왔기때문에 아래를 생략가능
     *private LocalDate test1; //년월
 
     private LocalDateTime test12; //년월일
-    * */
+    * *//*
     @Temporal(TemporalType.TIMESTAMP) //DATE날짜  TIME시간 TIMESTAMP날짜시간
     private Date createdDate;
 
@@ -165,7 +167,69 @@ public class Member {
 
     public void setTemp(int temp) {
         this.temp = temp;
+    }*/
+
+    /*기본키 매핑 20201008
+    *
+    * • 직접 할당: @Id만 사용
+      • 자동 생성(@GeneratedValue)
+        • IDENTITY: 데이터베이스에 위임, MYSQL
+        • SEQUENCE: 데이터베이스 시퀀스 오브젝트 사용, ORACLE
+            • @SequenceGenerator 필요
+        • TABLE: 키 생성용 테이블 사용, 모든 DB에서 사용
+            • @TableGenerator 필요
+        • AUTO: 방언에 따라 자동 지정, 기본값
+    * */
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    //AUTO는 DB방언에 맞춰서  만들어지지만 확인해 봐야한다.
+    //.IDENTITY 전략 -기본 키 생성을 DB에 위임 MySQL, PostgreSQL, SQL Server, DB2
+    //.sequence 전략 -데이터베이스 시퀀스는 유일한 값을 순서대로 생성하는 특별한
+                     //데이터베이스 오브젝트(예: 오라클 시퀀스)
+                     //오라클, PostgreSQL, DB2, H2 데이터베이스에서 사용
+   /*SEQUENCE 전략 - 매핑
+   * @Entity
+    @SequenceGenerator(
+     name = “MEMBER_SEQ_GENERATOR",
+     sequenceName = “MEMBER_SEQ", //매핑할 데이터베이스 시퀀스 이름
+     initialValue = 1, allocationSize = 1)
+        public class Member {
+         @Id
+         @GeneratedValue(strategy = GenerationType.SEQUENCE,
+         generator = "MEMBER_SEQ_GENERATOR")
+         private Long id;
+   *
+   * */
+
+    /*
+    *
+    * .TABLE 전략
+        • 키 생성 전용 테이블을 하나 만들어서 데이터베이스 시퀀스를 흉
+        내내는 전략
+        • 장점: 모든 데이터베이스에 적용 가능
+        • 단점: 성능 - table을 직접사용하기 때문에(sequence object와 같은 것들은 숫자뽑는데 최적화가 되어있는데 이건 되어있지 않기때문에)
+       * */
+
+    /*
+    *
+    *
+    * 권장하는 식별자 전략
+        • 기본 키 제약 조건: null 아님, 유일, 변하면 안된다.
+        • 미래까지 이 조건을 만족하는 자연키는 찾기 어렵다. 대리키(대체키)를 사용하자.
+        • 예를 들어 주민등록번호도 기본 키로 적절하기 않다.
+        • 권장: Long형 + 대체키 + 키 생성전략 사용 -> business를 key로 끌고오면 안된다.
+
+    *
+    * */
+    private Long id;//Long을 쓰는 이유? 지금은 application에 long을써도 영향을 주지않기때문에 사용
+
+    @Column(name = "name", insertable = true,updatable = true) //insert/updat/able 컬럼을 수정했을때 뭔가 DB에 INSERT할거냐 말거냐 반영을 할것인가 말것인가? 기본은 TRUE이다.
+    private String username;
+
+    public Member(){
+
     }
+
 }
 /*
 @Entity는 기본 생성자가 필수이다 (파라미터가 없는 public protected 생성자)
