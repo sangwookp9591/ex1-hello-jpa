@@ -184,10 +184,31 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.AUTO)
     //AUTO는 DB방언에 맞춰서  만들어지지만 확인해 봐야한다.
     //.IDENTITY 전략 -기본 키 생성을 DB에 위임 MySQL, PostgreSQL, SQL Server, DB2
+    //              -id에 값을 넣으면 안되고 db에 insert를 해야한다. 그러면 db에서 null로 insertquery가 날라오면 그때 값을 딱세팅해줌.
+    //              -문제 id값을 할수 있는 시점은 db에 값이 들어가봐야 알 수 있다.
+    //                   JPA생각해보면 영속성 컨텍스트를 관리될려면 무조건 PK값이 있어야하는데 얘는 PK를 DB에 들어가봐야 알 수 있다.
+    //                   울며겨자먹기로 ->IDENTITY상황만 예외적으로 em.persist를 호출하자말자  db에 insert쿼리를 날림(원래 commit하는 시점에 날린다)
+    //                   즉 em.persist 시점에 id값을 알 수 있다.
+    //                   즉 모아서 insert하는게 IDENETITY 전략에서는 불가하다.
+
+
+
     //.sequence 전략 -데이터베이스 시퀀스는 유일한 값을 순서대로 생성하는 특별한
                      //데이터베이스 오브젝트(예: 오라클 시퀀스)
                      //오라클, PostgreSQL, DB2, H2 데이터베이스에서 사용
-   /*SEQUENCE 전략 - 매핑
+                     //특징 - em.persist할때 영속성 컨텍스트에 넣을려고 하는데 sequence 전략이면 db에서 call next valuyue for ~로 값을 얻어와서
+                     //       member에 ID값을 저장해주고 영속성 컨텍스트에 저장(아직 DB에 INSERT QUERY에 안날라가고 COMMIT하는 시점에 호출된다.)
+                     //      allocationSize를 이용한다! 계속 next val를가져오기위해 네트워크를 타게 되는데 성능 문제가 생길 수 있음.
+                     //      미리 50개 사이즈를 db에 올려놓고 매모리에서 1씩쓰고 다왓네 이러면 nextcall 한번을 호출하고 db에는 50에서 100번대로 이동 하고 나는 51번부터 다시 쭉쓰는 방법
+                     //       (DB에 미리올려놓고 그 메모리만큼 쓰는방법) ->여러 웹서버가 있어도 동시성 이슈없이 다양한 문제를 해결할 수 있다.
+                     //         CALL NEXT VALUE를 2번 호출 하는데
+                     //         처음 호출       SEQ = 1   |  ID = 1
+                     //         두번째 호출     SEQ  = 51  |  ID = 2   MEMORY에서 호출
+                     //         세번째 호출     SEQ  = 51  |  ID = 3   MEMORY에서 호출
+                     //         이렇게 생각하면  10000개를 호출 해버리면 될까? -> 큰문제는 아니지만 다시 웹서버를 내리는 시점에 구멍이 생기게된다. (괜히 낭비가되기떄문에 50~100정도가 적당)
+                     //         ->처음에는 나는 50개씩 메모리에써야하는데 처음 호출하니깐 1임... 그래서 한번더 호출 한것이다.
+
+    /*SEQUENCE 전략 - 매핑
    * @Entity
     @SequenceGenerator(
      name = “MEMBER_SEQ_GENERATOR",
@@ -208,6 +229,8 @@ public class Member {
         내내는 전략
         • 장점: 모든 데이터베이스에 적용 가능
         • 단점: 성능 - table을 직접사용하기 때문에(sequence object와 같은 것들은 숫자뽑는데 최적화가 되어있는데 이건 되어있지 않기때문에)
+        • 특징 :allocationSize  -> SEQUENCE전략이랑 같음.
+
        * */
 
     /*
