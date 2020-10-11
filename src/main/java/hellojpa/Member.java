@@ -8,6 +8,10 @@ import java.util.Date;
 //@Table(name = "USER")//db의 이름이 먄약 Member가 아니고 user라고 되어있으면? 쿼리가 나갈때 USER라는 테이블에 적용하라고 나감.
 public class Member {
 /*
+
+
+
+
     @Id //id가 pk라는것을 알려줘야한다.
     private Long id;
     //@Column(name = "username") db컬럼이름이 name이 아니고 username일 경우
