@@ -29,7 +29,7 @@ public class Member {
     *   생성된 DDL은 운영서버에서는 사용하지 않거나, 적절히 다듬은 후 사용
     *persistence.xml에 <property name="hibernate.hbm2ddl.auto" value="create" /> 부분이다.
     *
-    * member drop 후 create table 생성
+    * member   drop 후 create table 생성
     *
     *
     * *//*
